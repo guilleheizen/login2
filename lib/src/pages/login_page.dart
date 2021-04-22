@@ -54,7 +54,7 @@ class LoginPage extends StatelessWidget {
                 SizedBox(
                   height: 30.0,
                 ),
-                _crearBoton()
+                _crearBoton(bloc)
               ],
             ),
           ),
@@ -107,8 +107,14 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _crearBoton() {
-    return ElevatedButton(
+  Widget _crearBoton( LoginBloc bloc) {
+
+
+    return StreamBuilder(
+      stream:  bloc.fromValidStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot){
+        return Container(
+          child: ElevatedButton(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
         child: Text('Ingresar'),
@@ -119,8 +125,15 @@ class LoginPage extends StatelessWidget {
           shape: MaterialStateProperty.all(RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
           ))),
-      onPressed: () {},
+      onPressed: snapshot.hasData? (){ _login(bloc, context);}:null,
+    ),
+        );
+      },
     );
+  }
+
+  _login(LoginBloc bloc, BuildContext context){
+    Navigator.pushReplacementNamed(context, 'home');
   }
 
   Widget _crearFondo(BuildContext context) {
